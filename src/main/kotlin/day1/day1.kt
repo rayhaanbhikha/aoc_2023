@@ -26,7 +26,7 @@ fun part2(input: List<String>) {
 }
 
 data class Number(val word: String, val num: Int) {
-    fun isSubset(otherWord: String) = word.startsWith(otherWord)
+    fun startsWith(otherWord: String) = word.startsWith(otherWord)
     fun matches(otherWord: String) = word == otherWord
 }
 
@@ -50,29 +50,31 @@ data class Window(var start: Int, var end: Int) {
     }
 
     fun move(step: Int = 1) {
-        start+=step
-        end+=step
+        start += step
+        end += step
     }
 
-    fun get() = IntRange(start, end)
+    val range: IntRange
+        get() = IntRange(start, end)
 }
 
 
 fun parseAndSumRow(word: String): Int {
     val size = word.length - 1
     val numsFound = mutableListOf<Int>()
-    var window = Window(0, 0)
+    val window = Window(0, 0)
 
     while (true) {
         if (window.start > size || window.end > size) {
             break
         }
 
-        val w = word.slice(window.get())
+        val w = word.substring(window.range)
+
         val lastChar = w.getOrNull(w.length - 1)
 
         val numberFound = numbers.find {
-            it.isSubset(w)
+            it.startsWith(w)
         }
 
         when {
@@ -109,6 +111,8 @@ fun parseAndSumRow(word: String): Int {
     }
 
 
+    println(numsFound)
+
 
     return when {
         numsFound.isEmpty() -> 0
@@ -118,5 +122,22 @@ fun parseAndSumRow(word: String): Int {
 }
 
 fun main() {
-    println(parseAndSumRow("zoneight234"))
+    listOf(
+        "4f4",
+        "238xrtqfcfgsrmrhkxz6",
+        "one2onefour",
+        "123456789",
+        "one2twthreethon4fivesixseveneightnine",
+        "two8onepcddklbzfoureight8five",
+        "4ontwoon1er2othree  ",
+        "two1 nine",
+        "eightwothree",
+        "abcone2threexyz",
+        "xtwone3four",
+        "4nineeightseven2",
+        "zoneight234",
+        "7pqrstsixteen",
+    ).onEach {
+        println("$it -> ${parseAndSumRow(it)}")
+    }
 }
