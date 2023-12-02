@@ -1,5 +1,3 @@
-package day1
-
 import java.io.File
 
 fun loadInput(): List<String> {
@@ -91,34 +89,5 @@ private fun String.parseAndSumRow(): Int {
         numbersFound.isEmpty() -> 0
         numbersFound.size == 1 -> "${numbersFound.first()}${numbersFound.first()}".toInt()
         else -> "${numbersFound.first()}${numbersFound.last()}".toInt()
-    }
-}
-
-fun main() {
-    listOf(
-        "oneone",
-        "2r",
-        "4f4",
-        "238xrtqfcfgsrmrhkxz6",
-        "one2onefour",
-        "123456789",
-        "one2twthreethon4fivesixseveneightnine",
-        "two8onepcddklbzfoureight8five",
-        "4ontwoon1er2othree  ",
-        "two1 nine",
-        "eightwothree",
-        "abcone2threexyz",
-        "xtwone3four",
-        "4nineeightseven2",
-        "zoneight234",
-        "7pqrstsixteen",
-        "8qvcrbdvjfqvdsjlfltlzfoursevenoneeightbmvv",
-        "sixfconesix6three1sixsix",
-        "eightone9nbdrkonenine8",
-        "3two5lbrb43nine7",
-        "foursix5eightfivezvnbsevenjcrzhxdzfb2",
-        "jmgnfive7ffglffpjlvbtvl935zz",
-    ).onEach {
-       String::parseAndSumRow
     }
 }
