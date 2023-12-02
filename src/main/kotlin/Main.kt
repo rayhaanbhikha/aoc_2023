@@ -1,7 +1,6 @@
 
 
 fun main() {
-    val input = loadInput()
-    println(part1(input))
-    println(part2(input))
+    val input = Day2.loadInput()
+    println(Day2().part2(input))
 }
