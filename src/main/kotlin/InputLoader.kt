@@ -17,7 +17,7 @@ object InputLoader {
     }
 
     fun loadExample(day: Int): List<String> {
-        val file = File("./src/main/resources/day${day}_example_input.txt")
+        val file = File("./src/main/resources/day${day}_input_example.txt")
         if (!file.exists()) {
             throw Exception("Example Input day $day missing")
         }
