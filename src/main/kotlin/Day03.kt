@@ -1,4 +1,4 @@
-class Day03(val input: List<String>) : Day {
+class Day03(private val input: List<String>) : Day {
     override fun part1(): Int {
         val parsedInput = input.map { it.toCharArray().toList() }
         val engine = Engine(parsedInput)
@@ -36,7 +36,7 @@ data class Cell(val coord: Coord, val value: Char) {
     fun isSymbol() = value != '.' && !isPartNumber()
 }
 
-class Engine(val raw: List<List<Char>>) {
+class Engine(raw: List<List<Char>>) {
     val grid = mutableMapOf<Coord, Cell>()
 
     init {
@@ -48,15 +48,11 @@ class Engine(val raw: List<List<Char>>) {
         }
     }
 
-    fun sumPartNumbers(): Int {
-        return grid.mapNotNull { (_, cell) ->
-            if (!cell.isSymbol()) {
-                return@mapNotNull 0
-            }
-
+    fun sumPartNumbers() = grid.mapNotNull { (_, cell) ->
+        if (!cell.isSymbol()) 0 else
             getPartNumbers(cell).sum()
-        }.sum()
-    }
+    }.sum()
+
 
     fun sumPartNumbersWithRatio(): Int {
         return grid.mapNotNull { (_, cell) ->
@@ -70,48 +66,47 @@ class Engine(val raw: List<List<Char>>) {
                 cell.value == '*' && numbers.size == 2 -> {
                     numbers.multiply()
                 }
+
                 else -> null
             }
 
         }.sum()
     }
 
-    fun getPartNumbers(cell: Cell): List<Int> {
-        return cell.coord.getAdjacentCoords().mapNotNull {
-            grid[it]
-        }.filter {
-            it.isPartNumber()
-        }.fold(mutableSetOf<Int>()) { numbersFound, it ->
-            val leftChars = mutableListOf<Char>()
-            val rightChars = mutableListOf<Char>()
+    private fun getPartNumbers(cell: Cell) = cell.coord.getAdjacentCoords().mapNotNull {
+        grid[it]
+    }.filter {
+        it.isPartNumber()
+    }.fold(mutableSetOf<Int>()) { numbersFound, it ->
+        val leftChars = mutableListOf<Char>()
+        val rightChars = mutableListOf<Char>()
 
-            // go right
-            var rightCoord = it.coord.east()
-            while (true) {
-                val nextCell = grid[rightCoord] ?: break
-                if (!nextCell.isPartNumber()) break
-                rightChars.add(nextCell.value)
-                rightCoord = rightCoord.east()
-            }
+        // go right
+        var rightCoord = it.coord.east()
+        while (true) {
+            val nextCell = grid[rightCoord] ?: break
+            if (!nextCell.isPartNumber()) break
+            rightChars.add(nextCell.value)
+            rightCoord = rightCoord.east()
+        }
 
-            var leftCoord = it.coord.west()
-            while (true) {
-                val nextCell = grid[leftCoord] ?: break
-                if (!nextCell.isPartNumber()) break
-                leftChars.add(nextCell.value)
-                leftCoord = leftCoord.west()
-            }
-            leftChars.reverse()
+        // go left
+        var leftCoord = it.coord.west()
+        while (true) {
+            val nextCell = grid[leftCoord] ?: break
+            if (!nextCell.isPartNumber()) break
+            leftChars.add(nextCell.value)
+            leftCoord = leftCoord.west()
+        }
+        leftChars.reverse()
 
 
-            val number = "${leftChars.joinToString("")}${it.value}${rightChars.joinToString("")}".toIntOrNull()
+        val number = "${leftChars.joinToString("")}${it.value}${rightChars.joinToString("")}".toIntOrNull()
+            ?: return@fold numbersFound
 
-            numbersFound.add(number ?: 0)
+        numbersFound.add(number)
 
-            numbersFound
-        }.toList()
-    }
-
+        numbersFound
+    }.toList()
 }
-
 internal fun List<Int>.multiply(): Int = this.fold(1) { acc, num -> acc * num }

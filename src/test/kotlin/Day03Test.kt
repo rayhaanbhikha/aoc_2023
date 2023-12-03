@@ -15,7 +15,7 @@ class Day03Test {
     fun part1() {
         val input = InputLoader.load(3)
         val res = Day03(input).part1()
-        assertEquals(4361, res)
+        assertEquals(539433, res)
     }
 
     @Test
