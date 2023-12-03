@@ -11,6 +11,9 @@ repositories {
 }
 
 dependencies {
+    implementation("com.squareup.okhttp3:okhttp:4.11.0")
+    // define any required OkHttp artifacts without version
+    implementation("com.squareup.okhttp3:okhttp")
     testImplementation(kotlin("test"))
 }
 

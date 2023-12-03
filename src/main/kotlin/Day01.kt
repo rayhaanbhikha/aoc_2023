@@ -1,18 +1,11 @@
-import java.io.File
-
-fun loadInput(): List<String> {
-    return File("./src/main/resources/day1_input.txt").readLines().map { it.trim() }
-}
-
-fun part1(input: List<String>): Int {
-    return input.mapNotNull { row ->
+class Day01(private val input: List<String>): Day {
+    override fun part1() = input.mapNotNull { row ->
         val result = row.filter { c -> c.isDigit() }
         "${result.firstOrNull()}${result.lastOrNull()}".toIntOrNull()
     }.sum()
-}
 
-fun part2(input: List<String>): Int {
-    return input.sumOf { it.parseAndSumRow()}
+    override fun part2() = input.sumOf { it.parseAndSumRow()}
+
 }
 
 enum class NumberCheck {
