@@ -9,7 +9,7 @@ object InputLoader {
         val file = File("./src/main/resources/day${day}_input.txt")
         if (!file.exists()) {
             println("Loading Input from adventofcode.com")
-            val input = AOCService.loadInput()
+            val input = AOCService.loadInput(day)
             file.writeText(input)
             return file.readLines()
         }
@@ -30,12 +30,12 @@ object AOCService {
 
     private val client = OkHttpClient()
 
-    fun loadInput(): String {
+    fun loadInput(day: Int): String {
         val sessionToken: String = System.getenv("AOC_SESSION_TOKEN")
             ?: throw Exception("Missing AOC_SESSION_TOKEN environment variable")
 
         val request = Request.Builder()
-            .url("https://adventofcode.com/2023/day/3/input")
+            .url("https://adventofcode.com/2023/day/${day}/input")
             .addHeader("Cookie", "session=${sessionToken};")
             .build()
 
