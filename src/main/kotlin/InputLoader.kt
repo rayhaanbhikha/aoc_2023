@@ -9,13 +9,26 @@ object InputLoader {
     fun load(day: Int): List<String> {
         val file = File("./src/main/resources/day${day}_input.txt")
         if (!file.exists()) {
-            println("Loading Input from adventofcode.com")
-            val input = AOCService.loadInput(day)
-            println(input)
-            file.writeText(input)
-            return file.readLines()
+            loadFile(day, file)
+            return load(5)
         }
         return file.readLines()
+    }
+
+    fun loadAsString(day: Int): String {
+        val file = File("./src/main/resources/day${day}_input.txt")
+        if (!file.exists()) {
+            loadFile(day, file)
+            return loadAsString(5)
+        }
+        return file.readText()
+    }
+
+    private fun loadFile(day: Int, file: File) {
+        println("Loading Input from adventofcode.com")
+        val input = AOCService.loadInput(day)
+        println(input)
+        file.writeText(input)
     }
 
     fun loadExample(day: Int): List<String> {
@@ -24,6 +37,14 @@ object InputLoader {
             throw Exception("Example Input day $day missing")
         }
         return file.readLines()
+    }
+
+    fun loadExampleAsString(day: Int): String {
+        val file = File("./src/main/resources/day${day}_input_example.txt")
+        if (!file.exists()) {
+            throw Exception("Example Input day $day missing")
+        }
+        return file.readText()
     }
 }
 
