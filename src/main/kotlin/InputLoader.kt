@@ -3,6 +3,7 @@ import okhttp3.Request
 import java.io.File
 import java.io.IOException
 import java.lang.Exception
+import kotlin.io.path.Path
 
 object InputLoader {
     fun load(day: Int): List<String> {
@@ -10,6 +11,7 @@ object InputLoader {
         if (!file.exists()) {
             println("Loading Input from adventofcode.com")
             val input = AOCService.loadInput(day)
+            println(input)
             file.writeText(input)
             return file.readLines()
         }
@@ -31,8 +33,7 @@ object AOCService {
     private val client = OkHttpClient()
 
     fun loadInput(day: Int): String {
-        val sessionToken: String = System.getenv("AOC_SESSION_TOKEN")
-            ?: throw Exception("Missing AOC_SESSION_TOKEN environment variable")
+        val sessionToken = loadToken()
 
         val request = Request.Builder()
             .url("https://adventofcode.com/2023/day/${day}/input")
@@ -45,4 +46,13 @@ object AOCService {
         }
     }
 
+    private fun loadToken(): String {
+        val homeDir = System.getProperty("user.home")
+        val sessionTokenFile = Path(homeDir, ".aoc-session").toFile()
+        if (!sessionTokenFile.exists()) {
+            throw Exception("set aoc session token in ~/.aoc-session")
+        }
+        val text = sessionTokenFile.readText()
+        return text
+    }
 }
