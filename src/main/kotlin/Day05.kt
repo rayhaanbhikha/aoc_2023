@@ -1,46 +1,58 @@
 import kotlin.io.path.Path
 import kotlin.math.abs
 
-class Day05(private val input: List<String>) : Day {
-    override fun part1(): Any {
-        TODO("Not yet implemented")
-    }
 
-    override fun part2(): Any {
-        TODO("Not yet implemented")
-    }
-
-}
 
 fun main() {
-
-    val res = input.seeds.minOfOrNull {
-        input.getLocation(it)
-    }
-
-    println(res)
+   println(input.getMinSeedLocation())
 }
 
 class Input(
-    private val rawSeeds: String,
-    private val rawSeedToSoilMap: String,
-    private val rawSoilToFertilizerMap: String,
-    private val rawFertilizerToWaterMap: String,
-    private val rawWaterToLight: String,
-    private val rawLightToTemperature: String,
-    private val rawTemperatureToHumidity: String,
-    private val rawHumidityToLocation: String,
+    rawSeeds: String,
+    rawSeedToSoilMap: String,
+    rawSoilToFertilizerMap: String,
+    rawFertilizerToWaterMap: String,
+    rawWaterToLight: String,
+    rawLightToTemperature: String,
+    rawTemperatureToHumidity: String,
+    rawHumidityToLocation: String,
 ) {
-    val seeds = parseNumRow(rawSeeds)
-    val seedToSoilMap = parseMap(rawSeedToSoilMap)
-    val soilToFertilizerMap = parseMap(rawSoilToFertilizerMap)
-    val fertilizerToWaterMap = parseMap(rawFertilizerToWaterMap)
-    val waterToLight = parseMap(rawWaterToLight)
-    val lightToTemperature = parseMap(rawLightToTemperature)
-    val temperatureToHumidity = parseMap(rawTemperatureToHumidity)
-    val humidityToLocation = parseMap(rawHumidityToLocation)
+    private val seeds = parseNumRow(rawSeeds)
+    private val seedToSoilMap = parseMap(rawSeedToSoilMap)
+    private val soilToFertilizerMap = parseMap(rawSoilToFertilizerMap)
+    private val fertilizerToWaterMap = parseMap(rawFertilizerToWaterMap)
+    private val waterToLight = parseMap(rawWaterToLight)
+    private val lightToTemperature = parseMap(rawLightToTemperature)
+    private val temperatureToHumidity = parseMap(rawTemperatureToHumidity)
+    private val humidityToLocation = parseMap(rawHumidityToLocation)
 
-    fun getLocation(startNum: Long): Long {
+//    init {
+//        val l = mutableSetOf<Long>()
+//        for (i in seeds.indices step 2) {
+//            val start = seeds[i]
+//            val end = seeds[i] + seeds[i + 1] - 1
+//            for (j in start..end) {
+//                l.add(j)
+//            }
+//        }
+//        seeds2 = l.toSet()
+//    }
+
+//    fun getMinSeedLocationPart2() {
+//        val memo = mutableMapOf<Long, Long>()
+//        val res = seeds2.minOfOrNull { seed ->
+//            val res = memo[seed] ?: getLocation(seed)
+//            memo[seed] = res
+//            res
+//        }
+//        println(res)
+//    }
+
+    fun getMinSeedLocation() = input.seeds.onEach {
+        println("$it -> ${getLocation(it)}")
+    }.minOfOrNull { getLocation(it) }
+
+    private fun getLocation(startNum: Long): Long {
         return seedToSoilMap.getNumber(startNum).let {
             soilToFertilizerMap.getNumber(it)
         }.let {
@@ -335,3 +347,12 @@ val input = Input(
 4168242936 2751566862 126724360
         """.trimIndent()
 )
+
+class Day05 : Day {
+    override fun part1() = input.getMinSeedLocation()
+
+    override fun part2(): Any {
+        return 0
+    }
+
+}
