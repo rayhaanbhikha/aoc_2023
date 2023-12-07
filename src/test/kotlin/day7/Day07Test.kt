@@ -14,5 +14,7 @@ class Day07Test {
 
     @Test
     fun part2() {
+        val input = InputLoader.load(7)
+        assertEquals(253253225, Day07(input).part2())
     }
 }
