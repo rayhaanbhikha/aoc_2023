@@ -64,9 +64,6 @@ object AOCService {
     private suspend fun makeRequest(day: Int, token: String): String {
         val response = client.request("https://adventofcode.com/2023/day/${day}/input") {
             cookie("session", token)
-            headers {
-                append(HttpHeaders.Cookie, "session=${token};")
-            }
         }
         return response.body<String>()
     }
