@@ -1,3 +1,5 @@
+val ktor_version: String by project
+
 plugins {
     kotlin("jvm") version "1.9.0"
     application
@@ -11,9 +13,9 @@ repositories {
 }
 
 dependencies {
-    implementation("com.squareup.okhttp3:okhttp:4.11.0")
-    // define any required OkHttp artifacts without version
-    implementation("com.squareup.okhttp3:okhttp")
+    implementation("io.ktor:ktor-client-core:$ktor_version")
+    implementation("io.ktor:ktor-client-cio:$ktor_version")
+    implementation("io.ktor:ktor-client-logging:$ktor_version")
     testImplementation(kotlin("test"))
 }
 
