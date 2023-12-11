@@ -12,5 +12,7 @@ class Day09Test {
 
     @Test
     fun part2() {
+        val input = InputLoader.load(9)
+        assertEquals(1091, Day09(input).part2())
     }
 }

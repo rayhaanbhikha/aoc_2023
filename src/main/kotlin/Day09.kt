@@ -12,18 +12,34 @@ class Day09(private val input: List<String>) : Day {
     override fun part2() = input
         .sumOf {
             val numbers = it.trim().split(" ").mapNotNull { num -> num.toIntOrNull() }
-            computeNextNum(numbers)
+            computePrevNum(numbers)
         }
         .also { println(it) }
+
+    private fun computePrevNum(numbers: List<Int>): Int {
+        val lastNum = mutableListOf(numbers.first())
+        var currentNumbers = numbers
+        while (!currentNumbers.all { it == 0 }) {
+            currentNumbers = currentNumbers.foldIndexed(mutableListOf()) { index, acc, currentNum ->
+                if (index != 0) acc.add(currentNum - currentNumbers[index - 1])
+                acc
+            }
+            if (currentNumbers.isNotEmpty()) {
+                lastNum.add(currentNumbers.first())
+            }
+        }
+
+        return lastNum.reversed().reduce { acc, i ->
+            i - acc
+        }
+    }
 
     private fun computeNextNum(numbers: List<Int>): Int {
         val lastNum = mutableListOf(numbers.last())
         var currentNumbers = numbers
         while (!currentNumbers.all { it == 0 }) {
             currentNumbers = currentNumbers.foldIndexed(mutableListOf()) { index, acc, currentNum ->
-                if (index == 0) return@foldIndexed acc
-                val res = currentNum - currentNumbers[index - 1]
-                acc.add(res)
+                if (index != 0) acc.add(currentNum - currentNumbers[index - 1])
                 acc
             }
             if (currentNumbers.isNotEmpty()) {
@@ -39,5 +55,5 @@ class Day09(private val input: List<String>) : Day {
 
 fun main() {
     val input = InputLoader.load(9)
-    Day09(input).part1()
+    Day09(input).part2()
 }
