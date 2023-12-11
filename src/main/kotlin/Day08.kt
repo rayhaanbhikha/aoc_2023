@@ -1,3 +1,5 @@
+import kotlin.Number
+
 fun constructGraph(input: List<String>): Map<String, Pair<String, String>> {
     val reg = Regex("(?<nodeid>\\w+) = \\((?<left>\\w{0,3}+), (?<right>\\w+)\\)")
     return input.mapNotNull {
@@ -16,9 +18,7 @@ fun constructGraph(input: List<String>): Map<String, Pair<String, String>> {
 
 
 class Day08(private val input: List<String>) : Day {
-    override fun part1(): Any? {
-
-
+    override fun part1(): Int {
         val graph = constructGraph(input.drop(2))
 
         var instructions = input[0].iterator()
@@ -38,36 +38,53 @@ class Day08(private val input: List<String>) : Day {
             steps++
         }
 
-        println(steps)
-        return 0
+        return steps
     }
 
-    override fun part2(): Any? {
-        TODO("Not yet implemented")
+    private fun walkFromNode(graph: Map<String, Pair<String, String>>, startingNode: String): Int {
+        var instructions = input[0].iterator()
+        var currentNode = startingNode
+        var steps = 0
+
+        while (!currentNode.endsWith('Z')) {
+            if (!instructions.hasNext()) {
+                instructions = input[0].iterator()
+            }
+            val nextInstruction = instructions.next()
+
+            val nextNodes = graph[currentNode]!!
+
+            currentNode = when (nextInstruction) {
+                'R' -> nextNodes.second
+                else -> nextNodes.first
+            }
+            steps++
+        }
+
+        return steps
+    }
+
+    override fun part2(): Long {
+        val graph = constructGraph(input.drop(2))
+
+        return graph
+            .keys
+            .filter { it.endsWith('A') }
+            .map { currentNode -> walkFromNode(graph, currentNode).toLong() }
+            .reduce { acc, i ->
+                acc * i / gcd(acc, i)
+            }
     }
 }
 
-fun main() {
-    Day08("""
-        RL
-
-        AAA = (BBB, CCC)
-        BBB = (DDD, EEE)
-        CCC = (ZZZ, GGG)
-        DDD = (DDD, DDD)
-        EEE = (EEE, EEE)
-        GGG = (GGG, GGG)
-        ZZZ = (ZZZ, ZZZ)
-    """.trimIndent().lines()).part1()
-
-    Day08("""
-LLR
-
-AAA = (BBB, BBB)
-BBB = (AAA, ZZZ)
-ZZZ = (ZZZ, ZZZ)
-    """.trimIndent().lines()).part1()
-
-    val input = InputLoader.load(8)
-    Day08(input).part1()
+fun gcd(num1: Long, num2: Long): Long {
+    var n1 = num1
+    var n2 = num2
+    while (n1 != n2) {
+        if (n1 > n2)
+            n1 -= n2
+        else
+            n2 -= n1
+    }
+    return n1
 }
